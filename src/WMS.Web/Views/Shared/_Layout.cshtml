@@ -59,6 +59,11 @@
         </div>
     </div>
 
+    <!-- 全局弹窗容器（用于iframe中的页面） -->
+    <div id="globalModalContainer" style="display: none;">
+        <!-- 弹窗内容将通过JavaScript动态插入 -->
+    </div>
+
     <!-- 注入菜单和权限数据 -->
     <script id="menuData" type="application/json">@Html.Raw(Context.Session.GetString("UserMenus") ?? "[]")</script>
     <script id="permissionData" type="application/json">@Html.Raw(Context.Session.GetString("UserPermissions") ?? "[]")</script>
@@ -67,6 +72,7 @@
     <script src="~/js/site.js"></script>
     <script src="~/js/menu.js"></script>
     <script src="~/js/permission.js"></script>
+    <script src="~/js/global-modal.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

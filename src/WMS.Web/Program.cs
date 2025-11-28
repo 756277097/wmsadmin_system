@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WMS.Application.Services;
 using WMS.Infrastructure.Data;
+using WMS.Web.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,11 +23,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<WmsDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-// 注册服务
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IRoleService, RoleService>();
-builder.Services.AddScoped<IMenuService, MenuService>();
+// 自动注册所有服务（自动发现并注册所有 I*Service 接口及其实现类）
+builder.Services.AddApplicationServices();
 
 // 注册全局过滤器 - 确保每个页面都从Session加载最新权限
 builder.Services.AddScoped<WMS.Web.Filters.RefreshPermissionFilter>();

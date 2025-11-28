@@ -1,0 +1,165 @@
+@model WMS.Application.DTOs.MaterialDto
+@{
+    ViewData["Title"] = "新增物料";
+}
+
+<div class="page-container">
+    <div class="page-header-section">
+        <div class="page-title-wrapper">
+            <h2 class="page-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px; vertical-align: middle;">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+                新增物料
+            </h2>
+            <p class="page-subtitle">创建新的物料主数据</p>
+        </div>
+    </div>
+
+    <div class="card-modern">
+        <div class="card-body-modern">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-modern alert-danger-modern" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px;">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                    </svg>
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form asp-action="Create" method="post" class="form-modern">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-modern">
+                            <label asp-for="Code" class="form-label-modern">
+                                物料编码 <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Code" class="form-control-modern" required placeholder="请输入物料编码" />
+                            <small class="form-text-modern">物料编码必须唯一，建议使用英文和数字</small>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="Name" class="form-label-modern">
+                                物料名称 <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Name" class="form-control-modern" required placeholder="请输入物料名称" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="Specification" class="form-label-modern">规格型号</label>
+                            <input asp-for="Specification" class="form-control-modern" placeholder="请输入规格型号" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="MaterialType" class="form-label-modern">
+                                物料类型 <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="MaterialType" class="form-control-modern" required>
+                                <option value="0">原料</option>
+                                <option value="1">半成品</option>
+                                <option value="2">成品</option>
+                                <option value="3">备品备件</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="BarcodeType" class="form-label-modern">
+                                条码类型 <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="BarcodeType" class="form-control-modern" required>
+                                <option value="0">单码</option>
+                                <option value="1">批次码</option>
+                                <option value="2">序列号</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="BaseUnit" class="form-label-modern">
+                                基本单位 <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="BaseUnit" class="form-control-modern" required placeholder="例如: kg、件、箱" />
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-modern">
+                            <label asp-for="AuxiliaryUnit" class="form-label-modern">辅助单位</label>
+                            <input asp-for="AuxiliaryUnit" class="form-control-modern" placeholder="例如: g、件" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="UnitConversion" class="form-label-modern">单位换算</label>
+                            <input asp-for="UnitConversion" type="number" step="0.01" class="form-control-modern" placeholder="例如: 1箱=12件，输入12" />
+                            <small class="form-text-modern">辅助单位与基本单位的换算比例（辅助单位:基本单位）</small>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="ShelfLife" class="form-label-modern">保质期（天）</label>
+                            <input asp-for="ShelfLife" type="number" class="form-control-modern" placeholder="请输入保质期天数" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="ValidityPeriod" class="form-label-modern">有效期（天）</label>
+                            <input asp-for="ValidityPeriod" type="number" class="form-control-modern" placeholder="请输入有效期天数" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">保管要求 - 温度（℃）</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input asp-for="StorageTempMin" type="number" step="0.1" class="form-control-modern" placeholder="最低温度" />
+                                </div>
+                                <div class="col-6">
+                                    <input asp-for="StorageTempMax" type="number" step="0.1" class="form-control-modern" placeholder="最高温度" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">保管要求 - 湿度（%）</label>
+                            <div class="row">
+                                <div class="col-6">
+                                    <input asp-for="StorageHumidityMin" type="number" step="0.1" class="form-control-modern" placeholder="最低湿度" />
+                                </div>
+                                <div class="col-6">
+                                    <input asp-for="StorageHumidityMax" type="number" step="0.1" class="form-control-modern" placeholder="最高湿度" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="StorageRequirements" class="form-label-modern">其他保管要求</label>
+                            <textarea asp-for="StorageRequirements" class="form-control-modern" rows="2" placeholder="请输入其他保管要求"></textarea>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="Remarks" class="form-label-modern">备注</label>
+                            <textarea asp-for="Remarks" class="form-control-modern" rows="2" placeholder="请输入备注信息"></textarea>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <div class="form-check-modern">
+                                <input asp-for="IsEnabled" class="form-check-input-modern" type="checkbox" checked id="isEnabled" />
+                                <label asp-for="IsEnabled" class="form-check-label-modern" for="isEnabled">
+                                    启用物料
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
+                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 1-1-1H7a1 1 0 0 1 1-1H2zm0 1v12h12V2H2z"/>
+                            <path d="M9.5 4a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM9 5h2v2H9z"/>
+                        </svg>
+                        保存
+                    </button>
+                    <a href="@Url.Action("Index", "Material")" class="btn-cancel">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

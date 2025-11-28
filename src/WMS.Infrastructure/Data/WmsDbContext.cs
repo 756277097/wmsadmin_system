@@ -18,6 +18,10 @@ public class WmsDbContext : DbContext
     public DbSet<Button> Buttons { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
+    public DbSet<Material> Materials { get; set; }
+    public DbSet<Warehouse> Warehouses { get; set; }
+    public DbSet<WarehouseZone> WarehouseZones { get; set; }
+    public DbSet<StorageLocation> StorageLocations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -111,6 +115,65 @@ public class WmsDbContext : DbContext
                 .WithMany(e => e.RolePermissions)
                 .HasForeignKey(e => e.ButtonId)
                 .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // 物料配置
+        modelBuilder.Entity<Material>(entity =>
+        {
+            entity.ToTable("Materials");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Specification).HasMaxLength(200);
+            entity.Property(e => e.BaseUnit).IsRequired().HasMaxLength(20);
+            entity.Property(e => e.AuxiliaryUnit).HasMaxLength(20);
+            entity.Property(e => e.StorageRequirements).HasMaxLength(500);
+            entity.Property(e => e.Remarks).HasMaxLength(1000);
+            entity.HasIndex(e => e.Code).IsUnique();
+        });
+
+        // 仓库配置
+        modelBuilder.Entity<Warehouse>(entity =>
+        {
+            entity.ToTable("Warehouses");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.ContactPerson).HasMaxLength(50);
+            entity.Property(e => e.ContactPhone).HasMaxLength(20);
+            entity.Property(e => e.Remarks).HasMaxLength(1000);
+            entity.HasIndex(e => e.Code).IsUnique();
+        });
+
+        // 库区配置
+        modelBuilder.Entity<WarehouseZone>(entity =>
+        {
+            entity.ToTable("WarehouseZones");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Remarks).HasMaxLength(1000);
+            entity.HasOne(e => e.Warehouse)
+                .WithMany(e => e.Zones)
+                .HasForeignKey(e => e.WarehouseId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasIndex(e => e.Code).IsUnique();
+        });
+
+        // 库位配置
+        modelBuilder.Entity<StorageLocation>(entity =>
+        {
+            entity.ToTable("StorageLocations");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Code).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.Remarks).HasMaxLength(1000);
+            entity.HasOne(e => e.Zone)
+                .WithMany(e => e.Locations)
+                .HasForeignKey(e => e.ZoneId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasIndex(e => e.Code).IsUnique();
         });
     }
 }

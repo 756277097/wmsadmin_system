@@ -356,10 +356,11 @@ static async Task<Dictionary<string, Menu>> SeedMenusAsync(WmsDbContext context)
     // 业务管理子菜单
     var businessSubMenus = new List<Menu>
     {
-        new Menu { Name = "仓库管理", Code = "Warehouse", ParentId = businessParentId, MenuType = 0, Path = "/Warehouse", Icon = "🏭", Sort = 1, IsEnabled = true, CreateTime = DateTime.Now },
-        new Menu { Name = "库存管理", Code = "Inventory", ParentId = businessParentId, MenuType = 0, Path = "/Inventory", Icon = "📊", Sort = 2, IsEnabled = true, CreateTime = DateTime.Now },
-        new Menu { Name = "入库管理", Code = "Inbound", ParentId = businessParentId, MenuType = 0, Path = "/Inbound", Icon = "📥", Sort = 3, IsEnabled = true, CreateTime = DateTime.Now },
-        new Menu { Name = "出库管理", Code = "Outbound", ParentId = businessParentId, MenuType = 0, Path = "/Outbound", Icon = "📤", Sort = 4, IsEnabled = true, CreateTime = DateTime.Now }
+        new Menu { Name = "物料管理", Code = "Material", ParentId = businessParentId, MenuType = 0, Path = "/Material", Icon = "📦", Sort = 1, IsEnabled = true, CreateTime = DateTime.Now },
+        new Menu { Name = "仓库管理", Code = "Warehouse", ParentId = businessParentId, MenuType = 0, Path = "/Warehouse", Icon = "🏭", Sort = 2, IsEnabled = true, CreateTime = DateTime.Now },
+        new Menu { Name = "库存管理", Code = "Inventory", ParentId = businessParentId, MenuType = 0, Path = "/Inventory", Icon = "📊", Sort = 3, IsEnabled = true, CreateTime = DateTime.Now },
+        new Menu { Name = "入库管理", Code = "Inbound", ParentId = businessParentId, MenuType = 0, Path = "/Inbound", Icon = "📥", Sort = 4, IsEnabled = true, CreateTime = DateTime.Now },
+        new Menu { Name = "出库管理", Code = "Outbound", ParentId = businessParentId, MenuType = 0, Path = "/Outbound", Icon = "📤", Sort = 5, IsEnabled = true, CreateTime = DateTime.Now }
     };
 
     // 报表中心子菜单
@@ -461,6 +462,15 @@ static async Task<Dictionary<string, Button>> SeedButtonsAsync(WmsDbContext cont
         new Button { Name = "新增", Code = "Menu:Add", MenuId = menus["Menu"].Id, ButtonType = 1, Sort = 1, IsEnabled = true, CreateTime = DateTime.Now },
         new Button { Name = "编辑", Code = "Menu:Edit", MenuId = menus["Menu"].Id, ButtonType = 2, Sort = 2, IsEnabled = true, CreateTime = DateTime.Now },
         new Button { Name = "删除", Code = "Menu:Delete", MenuId = menus["Menu"].Id, ButtonType = 3, Sort = 3, IsEnabled = true, CreateTime = DateTime.Now }
+    });
+
+    // 物料管理按钮
+    buttons.AddRange(new[]
+    {
+        new Button { Name = "查看", Code = "Material:View", MenuId = menus["Material"].Id, ButtonType = 0, Sort = 0, IsEnabled = true, CreateTime = DateTime.Now },
+        new Button { Name = "新增", Code = "Material:Add", MenuId = menus["Material"].Id, ButtonType = 1, Sort = 1, IsEnabled = true, CreateTime = DateTime.Now },
+        new Button { Name = "编辑", Code = "Material:Edit", MenuId = menus["Material"].Id, ButtonType = 2, Sort = 2, IsEnabled = true, CreateTime = DateTime.Now },
+        new Button { Name = "删除", Code = "Material:Delete", MenuId = menus["Material"].Id, ButtonType = 3, Sort = 3, IsEnabled = true, CreateTime = DateTime.Now }
     });
 
     // 仓库管理按钮

@@ -11,7 +11,7 @@
  Target Server Version : 80021
  File Encoding         : 65001
 
- Date: 28/11/2025 16:11:17
+ Date: 28/11/2025 17:05:19
 */
 
 SET NAMES utf8mb4;
@@ -58,6 +58,47 @@ INSERT INTO `buttons` VALUES (16, '删除', 'Warehouse:Delete', 10, 3, 3, 1, '20
 INSERT INTO `buttons` VALUES (17, '查看', 'Inventory:View', 11, 0, 0, 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `buttons` VALUES (18, '导出', 'Inventory:Export', 11, 4, 1, 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `buttons` VALUES (19, '盘点', 'Inventory:Stocktake', 11, 4, 2, 1, '2025-11-28 13:50:46', NULL);
+INSERT INTO `buttons` VALUES (20, '查看', 'Material:View', 17, 0, 0, 1, '2025-11-28 16:33:28', NULL);
+INSERT INTO `buttons` VALUES (21, '新增', 'Material:Add', 17, 1, 1, 1, '2025-11-28 16:33:28', NULL);
+INSERT INTO `buttons` VALUES (22, '编辑', 'Material:Edit', 17, 2, 2, 1, '2025-11-28 16:33:28', NULL);
+INSERT INTO `buttons` VALUES (23, '删除', 'Material:Delete', 17, 3, 3, 1, '2025-11-28 16:33:28', NULL);
+
+-- ----------------------------
+-- Table structure for materials
+-- ----------------------------
+DROP TABLE IF EXISTS `materials`;
+CREATE TABLE `materials`  (
+  `Id` int(0) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `Code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '物料编码（唯一）',
+  `Name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '物料名称',
+  `Specification` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '规格型号',
+  `BarcodeType` int(0) NOT NULL DEFAULT 0 COMMENT '条码类型：0-单码，1-批次码，2-序列号',
+  `MaterialType` int(0) NOT NULL DEFAULT 0 COMMENT '物料类型：0-原料，1-半成品，2-成品，3-备品备件',
+  `BaseUnit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '基本单位',
+  `AuxiliaryUnit` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '辅助单位',
+  `UnitConversion` decimal(18, 4) NULL DEFAULT NULL COMMENT '单位换算关系（辅助单位:基本单位）',
+  `ShelfLife` int(0) NULL DEFAULT NULL COMMENT '保质期（天数）',
+  `ValidityPeriod` int(0) NULL DEFAULT NULL COMMENT '有效期（天数）',
+  `StorageTempMin` decimal(10, 2) NULL DEFAULT NULL COMMENT '保管要求-温度（最低，℃）',
+  `StorageTempMax` decimal(10, 2) NULL DEFAULT NULL COMMENT '保管要求-温度（最高，℃）',
+  `StorageHumidityMin` decimal(10, 2) NULL DEFAULT NULL COMMENT '保管要求-湿度（最低，%）',
+  `StorageHumidityMax` decimal(10, 2) NULL DEFAULT NULL COMMENT '保管要求-湿度（最高，%）',
+  `StorageRequirements` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '其他保管要求',
+  `IsEnabled` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否启用',
+  `Remarks` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+  `CreateTime` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `UpdateTime` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`Id`) USING BTREE,
+  UNIQUE INDEX `UK_Materials_Code`(`Code`) USING BTREE,
+  INDEX `IDX_Materials_Name`(`Name`) USING BTREE,
+  INDEX `IDX_Materials_MaterialType`(`MaterialType`) USING BTREE,
+  INDEX `IDX_Materials_IsEnabled`(`IsEnabled`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '物料主数据表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of materials
+-- ----------------------------
+INSERT INTO `materials` VALUES (1, 'asdasda', 'asdasda', 'asd', 2, 0, 'asdasdasad', '1', 1.0000, 11, 11, 0.30, 0.10, 0.20, 0.20, '22', b'1', '222', '2025-11-28 16:34:41', NULL);
 
 -- ----------------------------
 -- Table structure for menus
@@ -98,6 +139,7 @@ INSERT INTO `menus` VALUES (13, '出库管理', 'Outbound', 5, 0, '/Outbound', '
 INSERT INTO `menus` VALUES (14, '日报表', 'DailyReport', 6, 0, '/Report/Daily', '📅', 1, 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `menus` VALUES (15, '月报表', 'MonthlyReport', 6, 0, '/Report/Monthly', '📆', 2, 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `menus` VALUES (16, '库存报表', 'InventoryReport', 6, 0, '/Report/Inventory', '📊', 3, 1, '2025-11-28 13:50:46', NULL);
+INSERT INTO `menus` VALUES (17, '物料管理', 'Material', 5, 0, '/Material', '📦', 1, 1, '2025-11-28 16:33:28', NULL);
 
 -- ----------------------------
 -- Table structure for rolepermissions
@@ -200,6 +242,18 @@ INSERT INTO `rolepermissions` VALUES (138, 18, 9, 9, 1, '2025-11-28 16:10:48');
 INSERT INTO `rolepermissions` VALUES (139, 18, 9, 12, 1, '2025-11-28 16:10:48');
 INSERT INTO `rolepermissions` VALUES (140, 18, 10, 13, 1, '2025-11-28 16:10:48');
 INSERT INTO `rolepermissions` VALUES (141, 18, 10, 14, 1, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (142, 17, 17, NULL, 0, '2025-11-28 16:33:28');
+INSERT INTO `rolepermissions` VALUES (143, 17, 17, 20, 1, '2025-11-28 16:33:28');
+INSERT INTO `rolepermissions` VALUES (144, 17, 17, 21, 1, '2025-11-28 16:33:28');
+INSERT INTO `rolepermissions` VALUES (145, 17, 17, 22, 1, '2025-11-28 16:33:28');
+INSERT INTO `rolepermissions` VALUES (146, 17, 17, 23, 1, '2025-11-28 16:33:28');
+INSERT INTO `rolepermissions` VALUES (147, 18, 17, NULL, 0, '2025-11-28 16:33:29');
+INSERT INTO `rolepermissions` VALUES (148, 18, 17, 20, 1, '2025-11-28 16:33:29');
+INSERT INTO `rolepermissions` VALUES (149, 18, 17, 21, 1, '2025-11-28 16:33:29');
+INSERT INTO `rolepermissions` VALUES (150, 18, 17, 22, 1, '2025-11-28 16:33:29');
+INSERT INTO `rolepermissions` VALUES (151, 18, 17, 23, 1, '2025-11-28 16:33:29');
+INSERT INTO `rolepermissions` VALUES (155, 19, 17, NULL, 0, '2025-11-28 16:33:29');
+INSERT INTO `rolepermissions` VALUES (156, 19, 17, 20, 1, '2025-11-28 16:33:29');
 
 -- ----------------------------
 -- Table structure for roles
@@ -226,6 +280,34 @@ INSERT INTO `roles` VALUES (18, '普通管理员', 'Admin', '普通管理权限�
 INSERT INTO `roles` VALUES (19, '仓库管理员', 'WarehouseManager', '负责仓库日常管理', 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `roles` VALUES (20, '库存管理员', 'InventoryManager', '负责库存管理', 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `roles` VALUES (21, '只读用户', 'ReadOnly', '只能查看，无操作权限', 1, '2025-11-28 13:50:46', NULL);
+
+-- ----------------------------
+-- Table structure for storagelocations
+-- ----------------------------
+DROP TABLE IF EXISTS `storagelocations`;
+CREATE TABLE `storagelocations`  (
+  `Id` int(0) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `Code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '库位编码（唯一）',
+  `Name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '库位名称',
+  `ZoneId` int(0) NOT NULL COMMENT '库区ID',
+  `LocationType` int(0) NOT NULL DEFAULT 0 COMMENT '库位属性：0-固定，1-随机',
+  `VolumeLimit` decimal(18, 4) NULL DEFAULT NULL COMMENT '体积限制（立方米）',
+  `WeightLimit` decimal(18, 4) NULL DEFAULT NULL COMMENT '重量限制（千克）',
+  `IsEnabled` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否启用',
+  `Remarks` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+  `CreateTime` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `UpdateTime` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`Id`) USING BTREE,
+  UNIQUE INDEX `UK_StorageLocations_Code`(`Code`) USING BTREE,
+  INDEX `IDX_StorageLocations_ZoneId`(`ZoneId`) USING BTREE,
+  INDEX `IDX_StorageLocations_LocationType`(`LocationType`) USING BTREE,
+  INDEX `IDX_StorageLocations_IsEnabled`(`IsEnabled`) USING BTREE,
+  CONSTRAINT `FK_StorageLocations_WarehouseZones` FOREIGN KEY (`ZoneId`) REFERENCES `warehousezones` (`Id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '库位表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of storagelocations
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for userroles
@@ -280,5 +362,57 @@ INSERT INTO `users` VALUES (23, 'user', 'JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3T
 INSERT INTO `users` VALUES (24, 'warehouse', 'JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk=', '仓库管理员', 'warehouse@wms.com', '13800138003', 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `users` VALUES (25, 'inventory', 'JAvlGPq9JyTdtvBO6x2llnRI1+gxwIyPqCKAn3THIKk=', '库存管理员', 'inventory@wms.com', '13800138004', 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `users` VALUES (26, 'aaa', 'z64mKIvYLhqXZpt3IEcM85Toew5TvdflhAVYBcxjAB8=', 'aaaaa', NULL, NULL, 1, '2025-11-28 14:35:44', '2025-11-28 14:35:51');
+
+-- ----------------------------
+-- Table structure for warehouses
+-- ----------------------------
+DROP TABLE IF EXISTS `warehouses`;
+CREATE TABLE `warehouses`  (
+  `Id` int(0) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `Code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '仓库编码（唯一）',
+  `Name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '仓库名称',
+  `Address` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '仓库地址',
+  `ContactPerson` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '联系人',
+  `ContactPhone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '联系电话',
+  `IsEnabled` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否启用',
+  `Remarks` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+  `CreateTime` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `UpdateTime` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`Id`) USING BTREE,
+  UNIQUE INDEX `UK_Warehouses_Code`(`Code`) USING BTREE,
+  INDEX `IDX_Warehouses_Name`(`Name`) USING BTREE,
+  INDEX `IDX_Warehouses_IsEnabled`(`IsEnabled`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '仓库表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of warehouses
+-- ----------------------------
+INSERT INTO `warehouses` VALUES (1, '', '', NULL, NULL, NULL, b'1', NULL, '2025-11-28 16:58:09', NULL);
+
+-- ----------------------------
+-- Table structure for warehousezones
+-- ----------------------------
+DROP TABLE IF EXISTS `warehousezones`;
+CREATE TABLE `warehousezones`  (
+  `Id` int(0) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `Code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '库区编码（唯一）',
+  `Name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '库区名称',
+  `WarehouseId` int(0) NOT NULL COMMENT '仓库ID',
+  `ZoneType` int(0) NOT NULL DEFAULT 0 COMMENT '库区类型：0-原料区，1-成品区，2-暂存区，3-退料区，4-不良品区',
+  `IsEnabled` bit(1) NOT NULL DEFAULT b'1' COMMENT '是否启用',
+  `Remarks` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '备注',
+  `CreateTime` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `UpdateTime` datetime(0) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`Id`) USING BTREE,
+  UNIQUE INDEX `UK_WarehouseZones_Code`(`Code`) USING BTREE,
+  INDEX `IDX_WarehouseZones_WarehouseId`(`WarehouseId`) USING BTREE,
+  INDEX `IDX_WarehouseZones_ZoneType`(`ZoneType`) USING BTREE,
+  INDEX `IDX_WarehouseZones_IsEnabled`(`IsEnabled`) USING BTREE,
+  CONSTRAINT `FK_WarehouseZones_Warehouses` FOREIGN KEY (`WarehouseId`) REFERENCES `warehouses` (`Id`) ON DELETE CASCADE ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '库区表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of warehousezones
+-- ----------------------------
 
 SET FOREIGN_KEY_CHECKS = 1;

@@ -57,6 +57,7 @@
     </div>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js"></script>
+    <script src="~/js/global-modal.js"></script>
     <!-- 注入权限数据到iframe页面 -->
     <script id="permissionData" type="application/json">@Html.Raw(Context.Session.GetString("UserPermissions") ?? "[]")</script>
     <script src="~/js/permission.js"></script>
