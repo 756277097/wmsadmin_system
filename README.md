@@ -13,7 +13,7 @@
 
 ### 登录页
 首先是登录页，干净简洁，支持用户名+密码登录：
-![登录页](docs/images/login.png)
+![登录页](https://github.com/756277097/wmsadmin_system/blob/main/src/WMS.Web/wwwroot/%E7%99%BB%E5%BD%95%E9%A1%B5.png)
 
 ### 用户管理
 在这里你可以添加、修改、删除用户，并为用户分配角色：
