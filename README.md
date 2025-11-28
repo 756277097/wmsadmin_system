@@ -17,15 +17,15 @@
 
 ### 用户管理
 在这里你可以添加、修改、删除用户，并为用户分配角色：
-![用户管理](docs/images/user.png)
+![用户管理](https://github.com/756277097/wmsadmin_system/blob/main/src/WMS.Web/wwwroot/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86.png)
 
 ### 角色管理
 角色管理页面可以控制角色可以访问哪些菜单、按钮权限：
-![角色管理](docs/images/role.png)
+![角色管理](https://github.com/756277097/wmsadmin_system/blob/main/src/WMS.Web/wwwroot/%E8%A7%92%E8%89%B2%E7%AE%A1%E7%90%86.png)
 
 ### 菜单管理
 菜单支持多级树形结构，可以自定义菜单名称、顺序、类型（内部页面或外部链接）：
-![菜单管理](docs/images/menu.png)
+![菜单管理](https://github.com/756277097/wmsadmin_system/blob/main/src/WMS.Web/wwwroot/%E8%8F%9C%E5%8D%95%E7%AE%A1%E7%90%86.png)
 
 ---
 
