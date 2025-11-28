@@ -79,14 +79,22 @@
 
 @section Scripts {
     <script>
-        // 将已有权限数据注入到全局变量
-        window.rolePermissions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Permissions));
+        // 将已有权限数据注入到全局变量（使用camelCase序列化）
+        var jsonOptions = {
+            propertyNamingPolicy: 'camelCase'
+        };
+        window.rolePermissions = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Permissions, new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase }));
+        console.log('从服务器加载的权限数据:', window.rolePermissions);
     </script>
     <script src="~/js/role-permission.js"></script>
     <script>
         // 初始化时设置权限数据
-        if (window.rolePermissions) {
+        if (window.rolePermissions && Array.isArray(window.rolePermissions)) {
             rolePermissions = window.rolePermissions;
+            console.log('权限数据已设置到全局变量，数量:', rolePermissions.length);
+        } else {
+            console.warn('权限数据格式不正确:', window.rolePermissions);
+            rolePermissions = [];
         }
     </script>
 }

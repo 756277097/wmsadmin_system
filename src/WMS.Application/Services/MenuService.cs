@@ -47,6 +47,8 @@ public class MenuService : IMenuService
 
     public async Task<List<MenuDto>> GetTreeAsync()
     {
+        // 获取所有菜单（包括禁用的），用于权限管理
+        // 同时获取所有按钮（包括禁用的），确保权限管理页面显示完整
         var menus = await _context.Menus
             .Include(m => m.Buttons)
             .OrderBy(m => m.Sort)
@@ -221,16 +223,19 @@ public class MenuService : IMenuService
                 Sort = m.Sort,
                 IsEnabled = m.IsEnabled,
                 Children = BuildMenuTree(menus, m.Id),
-                Buttons = m.Buttons.Select(b => new ButtonDto
-                {
-                    Id = b.Id,
-                    Name = b.Name,
-                    Code = b.Code,
-                    MenuId = b.MenuId,
-                    ButtonType = b.ButtonType,
-                    Sort = b.Sort,
-                    IsEnabled = b.IsEnabled
-                }).ToList()
+                // 包含所有按钮（包括禁用的），按排序字段排序
+                Buttons = m.Buttons
+                    .OrderBy(b => b.Sort)
+                    .Select(b => new ButtonDto
+                    {
+                        Id = b.Id,
+                        Name = b.Name,
+                        Code = b.Code,
+                        MenuId = b.MenuId,
+                        ButtonType = b.ButtonType,
+                        Sort = b.Sort,
+                        IsEnabled = b.IsEnabled
+                    }).ToList()
             })
             .OrderBy(m => m.Sort)
             .ToList();

@@ -11,7 +11,7 @@
  Target Server Version : 80021
  File Encoding         : 65001
 
- Date: 28/11/2025 14:45:14
+ Date: 28/11/2025 16:11:17
 */
 
 SET NAMES utf8mb4;
@@ -154,15 +154,6 @@ INSERT INTO `rolepermissions` VALUES (29, 17, 10, 16, 1, '2025-11-28 13:50:46');
 INSERT INTO `rolepermissions` VALUES (30, 17, 11, 17, 1, '2025-11-28 13:50:46');
 INSERT INTO `rolepermissions` VALUES (31, 17, 11, 18, 1, '2025-11-28 13:50:46');
 INSERT INTO `rolepermissions` VALUES (32, 17, 11, 19, 1, '2025-11-28 13:50:46');
-INSERT INTO `rolepermissions` VALUES (33, 18, 4, NULL, 0, '2025-11-28 13:50:46');
-INSERT INTO `rolepermissions` VALUES (34, 18, 7, NULL, 0, '2025-11-28 13:50:46');
-INSERT INTO `rolepermissions` VALUES (35, 18, 8, NULL, 0, '2025-11-28 13:50:46');
-INSERT INTO `rolepermissions` VALUES (36, 18, 7, 1, 1, '2025-11-28 13:50:46');
-INSERT INTO `rolepermissions` VALUES (37, 18, 7, 2, 1, '2025-11-28 13:50:46');
-INSERT INTO `rolepermissions` VALUES (38, 18, 7, 3, 1, '2025-11-28 13:50:46');
-INSERT INTO `rolepermissions` VALUES (39, 18, 8, 5, 1, '2025-11-28 13:50:46');
-INSERT INTO `rolepermissions` VALUES (40, 18, 8, 6, 1, '2025-11-28 13:50:46');
-INSERT INTO `rolepermissions` VALUES (41, 18, 8, 7, 1, '2025-11-28 13:50:46');
 INSERT INTO `rolepermissions` VALUES (42, 19, 5, NULL, 0, '2025-11-28 13:50:47');
 INSERT INTO `rolepermissions` VALUES (43, 19, 10, NULL, 0, '2025-11-28 13:50:47');
 INSERT INTO `rolepermissions` VALUES (44, 19, 12, NULL, 0, '2025-11-28 13:50:47');
@@ -196,6 +187,19 @@ INSERT INTO `rolepermissions` VALUES (71, 21, 8, 5, 1, '2025-11-28 13:50:47');
 INSERT INTO `rolepermissions` VALUES (72, 21, 9, 9, 1, '2025-11-28 13:50:47');
 INSERT INTO `rolepermissions` VALUES (73, 21, 10, 13, 1, '2025-11-28 13:50:47');
 INSERT INTO `rolepermissions` VALUES (74, 21, 11, 17, 1, '2025-11-28 13:50:47');
+INSERT INTO `rolepermissions` VALUES (129, 18, 4, NULL, 0, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (130, 18, 7, NULL, 0, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (131, 18, 8, NULL, 0, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (132, 18, 9, NULL, 0, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (133, 18, 5, NULL, 0, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (134, 18, 7, 1, 1, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (135, 18, 7, 3, 1, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (136, 18, 8, 5, 1, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (137, 18, 8, 6, 1, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (138, 18, 9, 9, 1, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (139, 18, 9, 12, 1, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (140, 18, 10, 13, 1, '2025-11-28 16:10:48');
+INSERT INTO `rolepermissions` VALUES (141, 18, 10, 14, 1, '2025-11-28 16:10:48');
 
 -- ----------------------------
 -- Table structure for roles
@@ -218,7 +222,7 @@ CREATE TABLE `roles`  (
 -- Records of roles
 -- ----------------------------
 INSERT INTO `roles` VALUES (17, '超级管理员', 'SuperAdmin', '拥有所有权限', 1, '2025-11-28 13:50:46', NULL);
-INSERT INTO `roles` VALUES (18, '普通管理员', 'Admin', '普通管理权限，可管理用户和角色', 1, '2025-11-28 13:50:46', NULL);
+INSERT INTO `roles` VALUES (18, '普通管理员', 'Admin', '普通管理权限，可管理用户和角色', 1, '2025-11-28 13:50:46', '2025-11-28 16:10:48');
 INSERT INTO `roles` VALUES (19, '仓库管理员', 'WarehouseManager', '负责仓库日常管理', 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `roles` VALUES (20, '库存管理员', 'InventoryManager', '负责库存管理', 1, '2025-11-28 13:50:46', NULL);
 INSERT INTO `roles` VALUES (21, '只读用户', 'ReadOnly', '只能查看，无操作权限', 1, '2025-11-28 13:50:46', NULL);

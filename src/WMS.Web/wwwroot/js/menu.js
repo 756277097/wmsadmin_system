@@ -196,11 +196,8 @@ function loadMenuPage(menu) {
                     iframe.id = 'mainIframe';
                     iframe.name = 'mainIframe';
                     iframe.frameBorder = '0';
-                    iframe.style.width = '100%';
-                    iframe.style.height = '100%';
-                    iframe.style.border = 'none';
-                    iframe.style.minHeight = 'calc(100vh - 200px)';
-                    iframe.style.display = 'block';
+                    iframe.scrolling = 'auto';
+                    iframe.className = 'main-iframe';
                     contentArea.appendChild(iframe);
                 } else {
                     iframe.style.display = 'block';

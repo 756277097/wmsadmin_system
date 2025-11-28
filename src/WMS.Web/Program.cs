@@ -5,7 +5,11 @@ using WMS.Infrastructure.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // 添加服务
-builder.Services.AddControllersWithViews()
+builder.Services.AddControllersWithViews(options =>
+    {
+        // 添加全局过滤器 - 确保每个页面都从Session加载最新权限
+        options.Filters.Add<WMS.Web.Filters.RefreshPermissionFilter>();
+    })
     .AddJsonOptions(options =>
     {
         // 配置 JSON 序列化为 camelCase，与前端 JavaScript 保持一致
@@ -23,6 +27,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IMenuService, MenuService>();
+
+// 注册全局过滤器 - 确保每个页面都从Session加载最新权限
+builder.Services.AddScoped<WMS.Web.Filters.RefreshPermissionFilter>();
 
 // Session配置
 builder.Services.AddSession(options =>

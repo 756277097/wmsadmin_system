@@ -6,15 +6,68 @@
     <title>@ViewData["Title"] - WMS管理系统</title>
     <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
+    <style>
+        /* iframe内部页面样式 - 确保只有内容区域滚动 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .iframe-body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .iframe-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 1.5rem;
+            background-color: #f5f7fa;
+        }
+        
+        /* 自定义滚动条样式 */
+        .iframe-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .iframe-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        .iframe-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        .iframe-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body>
-    <div class="container-fluid">
-        <div class="iframe-content">
-            @RenderBody()
-        </div>
+<body class="iframe-body">
+    <div class="iframe-content">
+        @RenderBody()
     </div>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js"></script>
+    <!-- 注入权限数据到iframe页面 -->
+    <script id="permissionData" type="application/json">@Html.Raw(Context.Session.GetString("UserPermissions") ?? "[]")</script>
+    <script src="~/js/permission.js"></script>
+    <script>
+        // iframe页面加载完成后初始化权限控制
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initPermission);
+        } else {
+            initPermission();
+        }
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

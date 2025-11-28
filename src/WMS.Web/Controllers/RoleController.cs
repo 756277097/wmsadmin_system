@@ -74,12 +74,30 @@ public class RoleController : Controller
         {
             try
             {
-                dto.Permissions = System.Text.Json.JsonSerializer.Deserialize<List<PermissionDto>>(permissionsJson) ?? new List<PermissionDto>();
+                var options = new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true // 忽略大小写
+                };
+                dto.Permissions = System.Text.Json.JsonSerializer.Deserialize<List<PermissionDto>>(permissionsJson, options) ?? new List<PermissionDto>();
+                
+                // 记录日志用于调试
+                Console.WriteLine($"编辑角色 {dto.Id}，权限数量: {dto.Permissions.Count}");
+                foreach (var perm in dto.Permissions)
+                {
+                    Console.WriteLine($"  - MenuId: {perm.MenuId}, ButtonId: {perm.ButtonId}, Type: {perm.PermissionType}");
+                }
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine($"解析权限JSON失败: {ex.Message}");
+                Console.WriteLine($"JSON内容: {permissionsJson}");
                 dto.Permissions = new List<PermissionDto>();
             }
+        }
+        else
+        {
+            Console.WriteLine($"编辑角色 {dto.Id}，permissionsJson为空");
+            dto.Permissions = new List<PermissionDto>();
         }
 
         await _roleService.UpdateAsync(dto);
