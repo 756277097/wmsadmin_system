@@ -1,0 +1,127 @@
+@model WMS.Application.DTOs.UserDto
+@{
+    ViewData["Title"] = "编辑用户";
+}
+
+<div class="page-container">
+    <div class="page-header-section">
+        <div class="page-title-wrapper">
+            <h2 class="page-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px; vertical-align: middle;">
+                    <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"/>
+                </svg>
+                编辑用户
+            </h2>
+            <p class="page-subtitle">修改用户信息和权限设置</p>
+        </div>
+    </div>
+
+    <div class="card-modern">
+        <div class="card-body-modern">
+            <form asp-action="Edit" method="post" class="form-modern">
+                <input type="hidden" asp-for="Id" />
+                <div class="row">
+                    <div class="col-md-8 col-lg-6">
+                        <div class="form-group-modern">
+                            <label asp-for="UserName" class="form-label-modern">用户名</label>
+                            <input asp-for="UserName" class="form-control-modern" readonly style="background-color: #f3f4f6;" />
+                            <small class="form-text-modern">用户名创建后不可修改</small>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="RealName" class="form-label-modern">真实姓名</label>
+                            <input asp-for="RealName" class="form-control-modern" placeholder="请输入真实姓名" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="Email" class="form-label-modern">邮箱</label>
+                            <input asp-for="Email" type="email" class="form-control-modern" placeholder="请输入邮箱地址" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="Phone" class="form-label-modern">手机号</label>
+                            <input asp-for="Phone" class="form-control-modern" placeholder="请输入手机号" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <div class="form-check-modern">
+                                <input asp-for="IsEnabled" class="form-check-input-modern" type="checkbox" id="isEnabled" />
+                                <label asp-for="IsEnabled" class="form-check-label-modern" for="isEnabled">
+                                    启用账户
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">角色权限</label>
+                            <div id="roleCheckboxes" class="role-checkboxes">
+                                <!-- 角色复选框将通过JS动态加载 -->
+                                <div class="loading-text">加载中...</div>
+                            </div>
+                            <small class="form-text-modern">选择用户所属的角色，角色决定用户的权限范围</small>
+                        </div>
+                        <input type="hidden" id="selectedRoleIds" name="roleIds" value="@string.Join(",", Model.RoleIds)" />
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
+                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 1-1-1H7a1 1 0 0 1 1-1H2zm0 1v12h12V2H2z"/>
+                            <path d="M9.5 4a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM9 5h2v2H9z"/>
+                        </svg>
+                        保存
+                    </button>
+                    <a href="@Url.Action("Index", "User")" class="btn-cancel">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 加载所有角色
+            const response = await fetch('/Role/GetList');
+            const roles = await response.json();
+            
+            const roleCheckboxes = document.getElementById('roleCheckboxes');
+            const selectedRoleIds = document.getElementById('selectedRoleIds').value.split(',').filter(id => id);
+            
+            roleCheckboxes.innerHTML = ''; // 清除加载中文本
+            
+            roles.forEach(role => {
+                const div = document.createElement('div');
+                div.className = 'form-check-modern role-checkbox-item';
+                
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = 'form-check-input-modern role-checkbox';
+                checkbox.value = role.id;
+                checkbox.id = `role_${role.id}`;
+                checkbox.checked = selectedRoleIds.includes(role.id.toString());
+                
+                checkbox.addEventListener('change', function() {
+                    updateSelectedRoleIds();
+                });
+                
+                const label = document.createElement('label');
+                label.className = 'form-check-label-modern';
+                label.htmlFor = `role_${role.id}`;
+                label.textContent = role.name;
+                
+                div.appendChild(checkbox);
+                div.appendChild(label);
+                roleCheckboxes.appendChild(div);
+            });
+        });
+        
+        function updateSelectedRoleIds() {
+            const checkboxes = document.querySelectorAll('.role-checkbox:checked');
+            const roleIds = Array.from(checkboxes).map(cb => cb.value);
+            document.getElementById('selectedRoleIds').value = roleIds.join(',');
+        }
+    </script>
+}
+

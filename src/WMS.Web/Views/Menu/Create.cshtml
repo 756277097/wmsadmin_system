@@ -1,0 +1,177 @@
+@model WMS.Application.DTOs.MenuDto
+@{
+    ViewData["Title"] = "新增菜单";
+}
+
+<div class="page-container">
+    <div class="page-header-section">
+        <div class="page-title-wrapper">
+            <h2 class="page-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px; vertical-align: middle;">
+                    <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                </svg>
+                新增菜单
+            </h2>
+            <p class="page-subtitle">创建新的系统菜单和按钮</p>
+        </div>
+    </div>
+
+    <div class="card-modern">
+        <div class="card-body-modern">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert-modern alert-danger-modern" role="alert">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px;">
+                        <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                    </svg>
+                    @ViewBag.Error
+                </div>
+            }
+
+            <form asp-action="Create" method="post" class="form-modern">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group-modern">
+                            <label asp-for="Name" class="form-label-modern">
+                                菜单名称 <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Name" class="form-control-modern" required placeholder="请输入菜单名称" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="Code" class="form-label-modern">
+                                菜单编码 <span class="text-danger">*</span>
+                            </label>
+                            <input asp-for="Code" class="form-control-modern" required placeholder="请输入菜单编码（英文）" />
+                            <small class="form-text-modern">菜单编码用于系统内部识别，建议使用英文大写字母</small>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="ParentId" class="form-label-modern">父菜单</label>
+                            <select asp-for="ParentId" class="form-control-modern">
+                                <option value="">顶级菜单</option>
+                                @foreach (var menu in ViewBag.Menus as List<WMS.Application.DTOs.MenuDto> ?? new List<WMS.Application.DTOs.MenuDto>())
+                                {
+                                    <option value="@menu.Id">@menu.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="MenuType" class="form-label-modern">
+                                菜单类型 <span class="text-danger">*</span>
+                            </label>
+                            <select asp-for="MenuType" class="form-control-modern" required>
+                                <option value="0">内部页面</option>
+                                <option value="1">外部链接</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="Path" class="form-label-modern">路径/链接</label>
+                            <input asp-for="Path" class="form-control-modern" placeholder="例如: /User/Index 或 https://example.com" />
+                            <small class="form-text-modern">内部页面填写路由路径，外部链接填写完整URL</small>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="Icon" class="form-label-modern">图标</label>
+                            <input asp-for="Icon" class="form-control-modern" placeholder="例如: 📁 或 fa-home" />
+                            <small class="form-text-modern">可以使用Emoji表情或图标类名</small>
+                        </div>
+
+                        <div class="form-group-modern">
+                            <label asp-for="Sort" class="form-label-modern">排序</label>
+                            <input asp-for="Sort" type="number" class="form-control-modern" value="0" placeholder="数字越小越靠前" />
+                        </div>
+
+                        <div class="form-group-modern">
+                            <div class="form-check-modern">
+                                <input asp-for="IsEnabled" class="form-check-input-modern" type="checkbox" checked id="isEnabled" />
+                                <label asp-for="IsEnabled" class="form-check-label-modern" for="isEnabled">
+                                    启用菜单
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group-modern">
+                            <label class="form-label-modern">按钮设置</label>
+                            <div id="buttonList" class="button-list-container">
+                                <button type="button" class="btn-add-button" onclick="addButton()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
+                                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+                                    </svg>
+                                    添加按钮
+                                </button>
+                                <div id="buttons" class="buttons-list">
+                                    <!-- 按钮列表 -->
+                                </div>
+                            </div>
+                            <small class="form-text-modern">为菜单添加按钮权限，按钮将显示在菜单页面中</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
+                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 1-1-1H7a1 1 0 0 1 1-1H2zm0 1v12h12V2H2z"/>
+                            <path d="M9.5 4a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5zM9 5h2v2H9z"/>
+                        </svg>
+                        保存
+                    </button>
+                    <a href="@Url.Action("Index", "Menu")" class="btn-cancel">返回</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+let buttonIndex = 0;
+
+function addButton() {
+    const buttonsDiv = document.getElementById('buttons');
+    const buttonHtml = `
+        <div class="button-item-card" data-index="${buttonIndex}">
+            <div class="button-item-content">
+                <div class="button-item-row">
+                    <div class="button-item-field">
+                        <input type="text" name="Buttons[${buttonIndex}].Name" class="form-control-modern form-control-sm" placeholder="按钮名称" required />
+                    </div>
+                    <div class="button-item-field">
+                        <input type="text" name="Buttons[${buttonIndex}].Code" class="form-control-modern form-control-sm" placeholder="按钮编码" required />
+                    </div>
+                    <div class="button-item-field">
+                        <select name="Buttons[${buttonIndex}].ButtonType" class="form-control-modern form-control-sm">
+                            <option value="0">查看</option>
+                            <option value="1">新增</option>
+                            <option value="2">编辑</option>
+                            <option value="3">删除</option>
+                            <option value="4">其他</option>
+                        </select>
+                    </div>
+                    <div class="button-item-action">
+                        <button type="button" class="btn-remove-button" onclick="removeButton(${buttonIndex})" title="删除">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    buttonsDiv.insertAdjacentHTML('beforeend', buttonHtml);
+    buttonIndex++;
+}
+
+function removeButton(index) {
+    const item = document.querySelector(`.button-item-card[data-index="${index}"]`);
+    if (item) {
+        item.remove();
+    }
+}
+</script>
+

@@ -1,0 +1,54 @@
+@model List<WMS.Application.DTOs.MenuDto>
+@{
+    ViewData["Title"] = "菜单管理";
+}
+
+<div class="page-container">
+    <div class="page-header-section">
+        <div class="page-title-wrapper">
+            <h2 class="page-title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 8px; vertical-align: middle;">
+                    <path d="M1 2.5A1.5 1.5 0 0 1 2.5 1h3A1.5 1.5 0 0 1 7 2.5v3A1.5 1.5 0 0 1 5.5 7h-3A1.5 1.5 0 0 1 1 5.5zm8 0A1.5 1.5 0 0 1 10.5 1h3A1.5 1.5 0 0 1 15 2.5v3A1.5 1.5 0 0 1 13.5 7h-3A1.5 1.5 0 0 1 9 5.5zm-8 8A1.5 1.5 0 0 1 2.5 9h3A1.5 1.5 0 0 1 7 10.5v3A1.5 1.5 0 0 1 5.5 15h-3A1.5 1.5 0 0 1 1 13.5zm8 0A1.5 1.5 0 0 1 10.5 9h3a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 13.5z"/>
+                </svg>
+                菜单管理
+            </h2>
+            <p class="page-subtitle">管理系统菜单和按钮权限</p>
+        </div>
+        <a href="@Url.Action("Create", "Menu")" class="btn-add">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
+            </svg>
+            新增菜单
+        </a>
+    </div>
+
+    <div class="card-modern">
+        <div class="card-body-modern">
+            <div id="menuTreeView" class="menu-tree-view">
+                @await Html.PartialAsync("_MenuTree", Model)
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="deleteForm" style="display:none;">
+    @Html.AntiForgeryToken()
+</div>
+
+<script>
+function deleteMenu(id) {
+    if (confirm('确定要删除该菜单吗？删除后子菜单和按钮也会被删除，此操作不可恢复。')) {
+        const form = document.getElementById('deleteForm');
+        const formData = new FormData();
+        formData.append('__RequestVerificationToken', document.querySelector('[name="__RequestVerificationToken"]').value);
+        
+        fetch('@Url.Action("Delete", "Menu")/' + id, {
+            method: 'POST',
+            body: formData
+        }).then(() => {
+            location.reload();
+        });
+    }
+}
+</script>
+
